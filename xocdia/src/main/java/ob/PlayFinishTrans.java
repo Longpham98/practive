@@ -1,12 +1,14 @@
 package ob;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class PlayFinishTrans implements Serializable {
 	private String N;
 	private Long AG = 0L;
 	private Long M = 0L;
-	private Field typeScore;
+	private List<Integer> typeScore;
+	private List<DataSend> choiceData;
 	
 	
 	public void incrementM(Long m) {
@@ -25,10 +27,10 @@ public class PlayFinishTrans implements Serializable {
 	public void setAG(Long ag) {
 		this.AG = ag;
 	}
-	public Field getTypeScore() {
+	public List<Integer> getTypeScore() {
 		return typeScore;
 	}
-	public void setTypeScore(Field typeScore) {
+	public void setTypeScore(List<Integer> typeScore) {
 		this.typeScore = typeScore;
 	}
 	public Long getM() {
@@ -36,5 +38,12 @@ public class PlayFinishTrans implements Serializable {
 	}
 	public void setM(Long m) {
 		this.M = m;
+	}
+	
+	public void setChoiceData(List<DataSend> choiceData) {
+		this.choiceData = choiceData;
+	}
+	public List<DataSend> getChoiceData() {
+		return this.choiceData;
 	}
 }

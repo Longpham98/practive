@@ -1,6 +1,7 @@
 package ob;
 
 import java.io.Serializable;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 
@@ -9,13 +10,17 @@ public class ObjectPlayer implements Serializable {
 	private static final Logger LOGGER = Logger.getLogger("xocdia");
 	private int Pid;
 	private String userName;
-	private Field option;
-	
+	private List<Integer> option;
+//	private DataSend choiceData;
+	private List<DataSend> choiceData;
 	
 	private int roomId;
 	private Long markCuoc;
 	private Long AG = 0L;
 	private int timeToStart;
+	private boolean autoExit;
+	private String language;
+	
 	
 	public ItemPlayer getItemPlayer() {
 		ItemPlayer p = new ItemPlayer();
@@ -27,6 +32,16 @@ public class ObjectPlayer implements Serializable {
 		return p;
 		
 	}
+	
+	public Long sumTienCuoc() {
+		Long sum = 0L;
+		for(int i=0; i<choiceData.size(); i++) {
+			sum += choiceData.get(i).getTiencuoc();
+		}
+		
+		return sum;
+	}
+	
 	
 	public int getPid() {
 		return Pid;
@@ -60,10 +75,10 @@ public class ObjectPlayer implements Serializable {
 	public void setAG(Long aG) {
 		AG = aG;
 	}
-	public Field getOption() {
+	public List<Integer> getOption() {
 		return this.option;
 	}
-	public void setOption(Field option) {
+	public void setOption(List<Integer> option) {
 		this.option = option;
 	}
 	public int getTimeToStart() {
@@ -73,5 +88,24 @@ public class ObjectPlayer implements Serializable {
 		this.timeToStart = time;
 	}
 	
+	public void setChoiceData(List<DataSend> list) {
+		this.choiceData = list;
+	}
+	public List<DataSend> getChoiceData() {
+		return this.choiceData;
+	}
 	
+	public boolean isAutoExit() {
+		return this.autoExit;
+	}
+	public void setAutoExit(boolean b) {
+		this.autoExit = b;
+	}
+	
+	public String getLanguage() {
+		return this.language;
+	}
+	public void setLanguage(String language) {
+		this.language = language;
+	}
 }

@@ -4,7 +4,7 @@ import java.util.List;
 
 public class SesKuFunctions {
 	
-	public static Field checkResult(List<Card> listCard) {
+	public static int checkResult(List<Card> listCard) {
 		int trangCount = 0;
 		int doCount = 0;
 		
@@ -28,7 +28,7 @@ public class SesKuFunctions {
 			return Field.BON_DO;
 		}
 		
-		return null;
+		return 0;
 	}
 	
 }

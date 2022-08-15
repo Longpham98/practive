@@ -5,6 +5,7 @@ public class EVT {
 	public static final String DATA_FINISH = "sendFinish";
 	public static final String DATA_BET = "bet";
 	public static final String DATA_READY = "rtable";
+	public static final String DATA_AUTO_EXIT = "autoExit";
 
 	public static final String OBJECT_FINISH = "finish";
 	public static final String OBJECT_AUTO_START = "autoStartGame";
@@ -23,5 +24,6 @@ public class EVT {
 	public static final String CLIENT_CREATE_TABLE = "ctable";
 	public static final String CLIENT_PLAY_BEGIN = "begin";
 	public static final String CLIENT_FINISH = "finish";
+	public static final String CLIENT_DEAL = "lc";
 
 }

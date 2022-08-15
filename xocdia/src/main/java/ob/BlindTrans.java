@@ -1,10 +1,13 @@
 package ob;
 
+import java.util.List;
+
 public class BlindTrans {
 	private String N;
 	private String evt;
 	private long AG;
-	private Field option;
+//	private List<Integer> option;
+	private List<DataSend> option;
 	
 	public BlindTrans() {
 		N = "";
@@ -33,11 +36,18 @@ public class BlindTrans {
 		this.AG = ag;
 	}
 	
-	public Field getOption() {
+//	public List<Integer> getOption() {
+//		return this.option;
+//	}
+//	public void setOption(List<Integer> option) {
+//		this.option = option;
+//	}
+//	
+	
+	public List<DataSend> getOption() {
 		return this.option;
 	}
-	public void setOption(Field option) {
+	public void setOption(List<DataSend> option) {
 		this.option = option;
 	}
-	
 }

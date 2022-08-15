@@ -1,5 +1,7 @@
 package logic;
 
+import java.util.List;
+
 import org.apache.log4j.Logger;
 
 import com.cubeia.firebase.api.action.GameDataAction;
@@ -10,6 +12,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import event.EVT;
+import ob.DataSend;
 import ob.LocalEVT;
 
 public class Processor implements GameProcessor {
@@ -38,12 +41,15 @@ public class Processor implements GameProcessor {
 				String evt = jo.get("evt").getAsString();
 
 				switch (evt) {
-				case EVT.DATA_READY:
-
+				case EVT.DATA_BET:
+					LOGGER.info("DATA_BET: ");
+//                    board.Bet(table, action.getPlayerId(), jo.get("M").getAsLong(),(List<Integer>) jo.get("typescore"));
+					board.Bet(table, action.getPlayerId(), (List<DataSend>) jo.get("data"));
 					break;
 
-				case EVT.DATA_BET:
-
+				case EVT.DATA_AUTO_EXIT:
+					LOGGER.info("exit table");
+					board.autoExit(this.game.getServiceContract(), table, action.getPlayerId());
 					break;
 
 				case EVT.DATA_FINISH:
@@ -87,18 +93,6 @@ public class Processor implements GameProcessor {
 			case EVT.OBJECT_FINISH:
 				LOGGER.info("evt: finish");
 				board.finishGame(table, this.game.getServiceContract());
-				break;
-
-			case EVT.OBJECT_DEAL:
-
-				break;
-
-			case EVT.OBJECT_SEND_TIME_OUT:
-
-				break;
-
-			case EVT.OBJECT_CHECK_BET:
-				
 				break;
 
 			default:
