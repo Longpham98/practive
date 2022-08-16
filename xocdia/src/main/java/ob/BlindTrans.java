@@ -4,6 +4,7 @@ import java.util.List;
 
 public class BlindTrans {
 	private String N;
+	private int pid;
 	private String evt;
 	private long AG;
 //	private List<Integer> option;
@@ -43,6 +44,12 @@ public class BlindTrans {
 //		this.option = option;
 //	}
 //	
+	public void setPid(int pid) {
+		this.pid = pid;
+	}
+	public int getPid() {
+		return this.pid;
+	}
 	
 	public List<DataSend> getOption() {
 		return this.option;

@@ -19,11 +19,15 @@ import com.dst.GameUtil;
 import com.dst.MessageUtil;
 import com.dst.common.TableLobbyAttributes;
 import com.dst.constants.ShanPlusConstant;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 
 import event.EVT;
 import ob.BlindTrans;
 import ob.Card;
+import ob.DataFinish;
 import ob.DataSend;
+import ob.EVTLeaveTable;
 import ob.Field;
 import ob.GameStatus;
 import ob.ListCardSend;
@@ -32,6 +36,7 @@ import ob.ObjectPlayer;
 import ob.Packet;
 import ob.PlayFinishTrans;
 import ob.PlaySend;
+import ob.PlayerAction;
 import ob.TableInfo;
 
 public class Board implements Serializable {
@@ -189,6 +194,15 @@ public class Board implements Serializable {
 
 	}
 
+	private int getErrorCode(int pid) {
+		for (ObjectPlayer player : listPlayer) {
+			if (player.getPid() == pid) {
+				return player.getErrorCode();
+			}
+		}
+		return EVTLeaveTable.NORMAL;
+	}
+
 	public void autoExit(ServiceContract serviceContract, Table table, int pid) {
 		synchronized (lock) {
 			try {
@@ -205,17 +219,16 @@ public class Board implements Serializable {
 							break;
 						}
 					}
-					
+
 					// nguoi xem
 					for (ObjectPlayer player : listViewPlayer) {
-						if(player.getPid() == pid) {
+						if (player.getPid() == pid) {
 							LeaveAction action = new LeaveAction(pid, table.getId());
 							table.getScheduler().scheduleAction(action, 0);
 							break;
 						}
 					}
-					
-					
+
 				}
 			} catch (Exception e) {
 				LOGGER.error(e.getMessage(), e);
@@ -322,7 +335,8 @@ public class Board implements Serializable {
 					ObjectPlayer playerSesKu = listPlayer.get(i);
 					PlayFinishTrans playFinishTrans = new PlayFinishTrans();
 
-					playFinishTrans.setN(playerSesKu.getUserName());
+					playFinishTrans.setPid(playerSesKu.getPid());
+					playFinishTrans.setS(result);
 					playFinishTrans.setChoiceData(playerSesKu.getChoiceData());
 
 					// check ket qua va tinh tien
@@ -343,15 +357,30 @@ public class Board implements Serializable {
 						} else {
 							playFinishTrans.setM(playFinishTrans.getM() - tiencuoc);
 						}
+
 					}
 
+					playerSesKu.setAG(playerSesKu.getAG() + playFinishTrans.getM());
+					
+					
 					dataFinish.add(playFinishTrans);
 
 				}
 				timeToStart = 5;
 				table.getNotifier().notifyAllPlayers(GameUtil.toDataAction(0, getTid(),
 						new Packet(EVT.CLIENT_FINISH, GameUtil.gson.toJson(dataFinish), timeToStart)));
+				
+				DataFinish finishResult = new DataFinish();
+				finishResult.setDataFinish(dataFinish);
+				finishResult.setGameResult(result);
+				table.getNotifier().notifyAllPlayers(GameUtil.toDataAction(0, getTid(),
+						new Packet(EVT.CLIENT_FINISH, GameUtil.gson.toJson(finishResult), timeToStart)));
+
 				isFinished = true;
+
+				//
+				LOGGER.info("Gameover: Table " + getTid() + ": " + new PlayerAction(EVT.CLIENT_FINISH, 0, getTid(),
+						new Packet(EVT.CLIENT_FINISH, GameUtil.gson.toJson(dataFinish), timeToStart)));
 
 				// chuan bi sang van moi
 				table.getAttributeAccessor().setDateAttribute(TIME_TO_START, new Date());
@@ -427,7 +456,6 @@ public class Board implements Serializable {
 
 				for (int i = 0; i < listPlayer.size(); i++) {
 					if (listPlayer.get(i).getPid() == pid) {
-						totalBet += listPlayer.get(i).sumTienCuoc();
 
 //						listPlayer.get(i).setMarkCuoc(tiencuoc);
 //						listPlayer.get(i).setChoiceData(tiencuoc, listTypeScore);
@@ -435,6 +463,7 @@ public class Board implements Serializable {
 
 						BlindTrans sender = new BlindTrans();
 						sender.setN(listPlayer.get(i).getUserName());
+						sender.setPid(listPlayer.get(i).getPid());
 //						sender.setAG(tiencuoc);
 						sender.setEvt(EVT.CLIENT_BET);
 //						sender.setOption(listTypeScore);

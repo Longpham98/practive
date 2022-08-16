@@ -126,6 +126,16 @@ public class Activator implements GameActivator, RoutableActivator, RequestAware
 		// TODO Auto-generated method stub
 		UserGame ui = GameUtil.gson.fromJson(serviceContract.getUserInfoByPid(pid, 0), UserGame.class);
 		
+		if(ui == null) {
+			throw new CreationRequestDeniedException(1);
+		}
+		if(ui.getTableId() !=0) {
+			throw new CreationRequestDeniedException(1);
+		}
+		if(attributes.length < 1) {
+			throw new CreationRequestDeniedException(1);
+		}
+
 		return new Participant(pid, attributes, ui);
 	}
 	

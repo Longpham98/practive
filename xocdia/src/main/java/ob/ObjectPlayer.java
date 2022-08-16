@@ -20,7 +20,7 @@ public class ObjectPlayer implements Serializable {
 	private int timeToStart;
 	private boolean autoExit;
 	private String language;
-	
+	private int errorCode;	
 	
 	public ItemPlayer getItemPlayer() {
 		ItemPlayer p = new ItemPlayer();
@@ -107,5 +107,12 @@ public class ObjectPlayer implements Serializable {
 	}
 	public void setLanguage(String language) {
 		this.language = language;
+	}
+	
+	public void setErrorCode (int error) {
+		this.errorCode = error;
+	}
+	public int getErrorCode() {
+		return this.errorCode;
 	}
 }

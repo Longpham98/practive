@@ -1,5 +1,6 @@
 package logic;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -8,6 +9,7 @@ import com.cubeia.firebase.api.action.GameDataAction;
 import com.cubeia.firebase.api.action.GameObjectAction;
 import com.cubeia.firebase.api.game.GameProcessor;
 import com.cubeia.firebase.api.game.table.Table;
+import com.dst.GameUtil;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
@@ -43,8 +45,15 @@ public class Processor implements GameProcessor {
 				switch (evt) {
 				case EVT.DATA_BET:
 					LOGGER.info("DATA_BET: ");
-//                    board.Bet(table, action.getPlayerId(), jo.get("M").getAsLong(),(List<Integer>) jo.get("typescore"));
-					board.Bet(table, action.getPlayerId(), (List<DataSend>) jo.get("data"));
+					
+					List<DataSend> listChoice = new ArrayList<>();
+					DataSend [] arrReturn = GameUtil.gson.fromJson(jo.get("data"), DataSend [].class);
+					
+					for(int i=0; i< arrReturn.length; i++) {
+						listChoice.add(arrReturn[i]);
+					}
+
+					board.Bet(table, action.getPlayerId(), listChoice);
 					break;
 
 				case EVT.DATA_AUTO_EXIT:
